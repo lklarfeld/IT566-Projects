@@ -9,6 +9,12 @@ class HomeInventory():
         """Initialize Home Inventory object."""
         self._Initialize_Home_Inventory_Dictionary()
 
+
+
+    def _get_file_path(self):
+        """Gets file path from user"""
+        #f_path
+    
     def _Initialize_Home_Inventory_Dictionary(self):
         if __debug__:
             print("Initializing new Home Inventory...")

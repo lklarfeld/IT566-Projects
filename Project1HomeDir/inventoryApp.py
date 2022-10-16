@@ -19,10 +19,17 @@ class InventoryApp():
         self.SEARCH_INVENTORY='6'
         self.EXIT='7'
 		# Fields
-        self.menu_Choice = 1
+        self.menu_choice = 1
         self.keep_Going = True
         self.home_Inventory = HomeInventory()
         pass
+    
+    def process_Menu_Choices():
+        """Process menu choices and execute corresponding methods"""
+        self.menu_choice = input('Please enter menu item number: ')
+        if __debug__:
+            print(f'You entered: {self.menu_Choice}')
+        
 
     def clear_System(self):
         os.system('cls')
@@ -36,6 +43,7 @@ class InventoryApp():
         print('\t\t3. List Inventory')
         print('\t\t4. Add Items')
         print('\t\t5. Save Inventory')
+        print('\t\t6. Search Inventory')
         print('\t\t7. Exit')
         print()
 

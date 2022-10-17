@@ -70,7 +70,8 @@ class HomeInventory():
 
     def _get_file_path(self):
         """Gets file path from user"""
-        #f_path
+        f_path = input("Please enter path and filename: ")
+        return f_path
     
     def _Initialize_Home_Inventory_Dictionary(self):
         if __debug__:

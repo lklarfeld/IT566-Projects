@@ -1,6 +1,5 @@
 """Implements household inventory control features."""
 
-from typing_extensions import Self
 from homeInventory import HomeInventory
 from subprocess import call
 import os

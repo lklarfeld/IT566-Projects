@@ -1,83 +1,120 @@
-"""Implements Home Inventory data structures and operations."""
+"""Implements household inventory control features."""
 
-import json
-from datetime import date
+from typing_extensions import Self
+from homeInventory import HomeInventory
+from subprocess import call
+import os
 
-# Backend
-class HomeInventory():
+# Frontend
+class InventoryApp():
+
     def __init__(self):
-        """Initialize Home Inventory object."""
-        self._Initialize_Home_Inventory_Dictionary()
+        """Initializing objects"""
+		# Constants
+        self.NEW_INVENTORY='1'
+        self.LOAD_INVENTORY='2'
+        self.LIST_INVENTORY='3'
+        self.ADD_ITEMS='4'
+        self.SAVE_INVENTORY='5'
+        self.SEARCH_INVENTORY='6'
+        self.EXIT='7'
+		# Fields
+        self.menu_choice = 1
+        self.keep_going = True
+        self.home_inventory = HomeInventory()
+        pass
         
 
+    def clear_System(self):
+        os.system('cls')
+
+    def display_Menu(self):
+        """Displaying the menu"""
+        print('\t\t\tHousehold Inventory Application')
+        print()
+        print('\t\t1. New Inventory')
+        print('\t\t2. Load Inventory')
+        print('\t\t3. List Inventory')
+        print('\t\t4. Add Items')
+        print('\t\t5. Save Inventory')
+        print('\t\t6. Search Inventory')
+        print('\t\t7. Exit')
+        print()
+        
+    def process_Menu_Choices(self):
+        """Process menu choices and execute corresponding methods"""
+        self.menu_choice = input('Please enter menu item number: ')
+        if __debug__:
+            print(f'You entered: {self.menu_Choice}')
+        match self.menu_choice:
+            case self.NEW_INVENTORY:
+                self.new_inventory()
+            case self.LOAD_INVENTORY:
+                self.load_inventory()
+            case self.LIST_INVENTORY:
+                self.list_inventory()
+            case self.ADD_ITEMS:
+                self.add_items()
+            case self.SAVE_INVENTORY:
+                self.save_inventory()
+            case self.EXIT:
+                if __debug__:
+                    print('Bye!')
+                self.keep_going = False
+                self.clear_System
+            case _:
+                print('Non-valid choice!')
+                
     def new_inventory(self):
-        """Initializing new dictionary to store inventory data based on input"""
-        if(self.dictionary != None) and (bool(self.dictionary)):
-            user_input = input('Save current inventory? (y/n): ')
-            match user_input.lower():
-                case 'y':
-                    self.save_inventory()
-                    self._Initialize_Home_Inventory_Dictionary()
-                case 'n':
-                    self._Initialize_Home_Inventory_Dictionary()
-                case _:
-                    self._Initialize_Home_Inventory_Dictionary()
-        else:
-            self._Initialize_Home_Inventory_Dictionary()
-    
+        """User creates a new inventory"""
+        if __debug__:
+            print('new_inventory() called')
+        self.home_inventory.new_inventory()
+        input('Press any key to continue...')
+        self.clear_System()
+        
     def load_inventory(self):
-        """User loads inventory from file"""
         if __debug__:
             print('load_inventory() called')
-        try:
-            file_path = self._get_file_path()
-            """With is safe (this is for future refrence)"""
-            with open(file_path, 'r', encoding='UTF-8') as f:
-                self.dictionary = json.loads(f.read())
-        except OSError:
-            print('Problem loading file. Please try again :)')
-            
-    def save_inventory(self):
-        """Saves current inventory to file"""
-        if __debug__:
-            print('save_inventory() was called')
-        if self.dictionary != None:
-            file_path = self._get_file_path()
-            """again this is the safe way to open files!!!"""
-            with open(file_path, 'w', encoding='UTF-8') as f:
-                f.write(json.dumps(self.dictionary))
-    
-    def search_inventory(self):
-        """Searches current inventory based on user input"""
-        if __debug__:
-            print('search_inventory() called')
-        
+        self.home_inventory.load_inventory()
+        input('Press any key to continue...')
+        self.clear_System()
         
     def list_inventory(self):
         if __debug__:
-            print('list_inventory() was called')
-        for key, value in self.dictionary.items():
-            if key == 'items':
-                print('items:')
-                for item in value:
-                    print(f'\t {item["item"]:15} \t {item["count"]}')
-            else:
-                print(f'{key}: \t {value}')
+            print('list_inventory() called')
+        self.home_inventory.list_inventory()
+        input('Press any key to continue...')
+        self.clear_System()
+        
+    def save_inventory(self):
+        if __debug__:
+            print('save_inventory() called')
+        self.home_inventory.save_inventory()
+        input('Press any key to continue...')
+        self.clear_System()
     
-    def add_items(self, item_name, item_count):
-        assert self.dictionary != None
-        self.dictionary['items'].append({'item': item_name, 'count': int(item_count)})
+    def search_inventory(self):
+        if __debug__:
+            print('search_inventory() called')
+        self.home_inventory.search_inventory()
+        input('Press any key to continue...')
+        self.clear_System()
+        
+    def add_items(self):
+        if __debug__:
+            print('add_items() called')
+            keep_going = 'y'
+        while keep_going[0] == 'y':
+            item_name = input('Item name: ')
+            item_count = input('Item count: ')
+            self.home_inventory.add_items(item_name, item_count)
+            keep_going = input('Add another (y/n): ')
 
-    def _get_file_path(self):
-        """Gets file path from user"""
-        #f_path
-    
-    def _Initialize_Home_Inventory_Dictionary(self):
-        if __debug__:
-            print("Initializing new Home Inventory...")
-        self.dictionary = {}
-        self.dictionary['type'] = 'Home Inventory'
-        self.dictionary['date'] = date.today().isoformat()
-        self.dictionary['items'] = []
-        if __debug__:
-            print("New Home Inventory Initialized")
+    def start_Application(self):
+        """Starts the application"""
+		# Clear Screen
+        while self.keep_going:
+            self.clear_System()
+            self.display_Menu()
+            self.process_Menu_Choices()

@@ -83,6 +83,9 @@ class RosterApp(object):
 		self.clear_screen()
 		if __debug__:
 			print('print_roster() method called...')
+		self.team_roster.print_roster()
+		input('Press any key to continue...')
+		self.clear_screen()
 		
 
 

@@ -17,6 +17,17 @@ class Roster(object):
         except OSError:
             print('Problem loading file. Please try again :)')
 
+    def print_roster(self):
+        """Prints current Roster/Dictionary out"""
+        if __debug__:
+            print('print_roster() called')
+        for key, value in self.dictionary.items():
+            if key == 'members':
+                print('members:')
+                for item in value:
+                    print(f'\t {item["name"]:25} \t {item["age"]}')
+            else:
+                print(f'{key}: \t {value}')
 
     def _get_file_path(self):
         """Gets file path from user"""
@@ -29,8 +40,8 @@ class Roster(object):
         self.dictionary = {}
         self.dictionary['type'] = 'Team Roster'
         self.dictionary['date'] = date.today().isoformat()
-        self.dictionary['Sport'] = 'Curling'
-        self.dictionary['Country'] = 'USA'
-        self.dictionary['Members'] = []
+        self.dictionary['sport'] = 'Curling'
+        self.dictionary['country'] = 'USA'
+        self.dictionary['members'] = []
         if __debug__:
             print("New Roster Directory Initialized")

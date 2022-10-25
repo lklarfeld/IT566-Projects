@@ -94,6 +94,9 @@ class RosterApp(object):
 		self.clear_screen()
 		if __debug__:
 			print('save_roster() method called...')
+		self.team_roster.save_roster()
+		input('Press any key to continue...')
+		self.clear_screen()
 		
 
 

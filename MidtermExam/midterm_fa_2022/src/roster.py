@@ -1,4 +1,5 @@
 """Implements Team Roster Operations"""
+
 import json
 from datetime import date
 
@@ -32,6 +33,15 @@ class Roster(object):
     def add_members(self, member_name, member_age):
         assert self.dictionary != None
         self.dictionary['members'].append({'name': member_name, 'age': int(member_age)})
+
+    def save_roster(self):
+        """saves current roster to file"""
+        if __debug__:
+            print('save_roster() called')
+        if self.dictionary !=None:
+            file_path = self._get_file_path()
+            with open(file_path, 'w', encoding='UTF-8') as f:
+                f.write(json.dumps(self.dictionary))        
 
     def _get_file_path(self):
         """Gets file path from user"""

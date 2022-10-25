@@ -29,6 +29,10 @@ class Roster(object):
             else:
                 print(f'{key}: \t {value}')
 
+    def add_members(self, member_name, member_age):
+        assert self.dictionary != None
+        self.dictionary['members'].append({'name': member_name, 'age': int(member_age)})
+
     def _get_file_path(self):
         """Gets file path from user"""
         f_path = input("Please enter path and filename: ")

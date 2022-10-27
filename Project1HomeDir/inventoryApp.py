@@ -44,7 +44,7 @@ class InventoryApp():
         """Process menu choices and execute corresponding methods"""
         self.menu_choice = input('Please enter menu item number: ')
         if __debug__:
-            print(f'You entered: {self.menu_Choice}')
+            print(f'You entered: {self.menu_choice}')
         match self.menu_choice:
             case self.NEW_INVENTORY:
                 self.new_inventory()
@@ -56,6 +56,8 @@ class InventoryApp():
                 self.add_items()
             case self.SAVE_INVENTORY:
                 self.save_inventory()
+            case self.SEARCH_INVENTORY:
+                self.search_inventory()
             case self.EXIT:
                 if __debug__:
                     print('Bye!')
@@ -69,35 +71,35 @@ class InventoryApp():
         if __debug__:
             print('new_inventory() called')
         self.home_inventory.new_inventory()
-        input('Press any key to continue...')
+        input('Press Enter to continue...')
         self.clear_System()
         
     def load_inventory(self):
         if __debug__:
             print('load_inventory() called')
         self.home_inventory.load_inventory()
-        input('Press any key to continue...')
+        input('Press Enter to continue...')
         self.clear_System()
         
     def list_inventory(self):
         if __debug__:
             print('list_inventory() called')
         self.home_inventory.list_inventory()
-        input('Press any key to continue...')
+        input('Press Enter to continue...')
         self.clear_System()
         
     def save_inventory(self):
         if __debug__:
             print('save_inventory() called')
         self.home_inventory.save_inventory()
-        input('Press any key to continue...')
+        input('Press Enter to continue...')
         self.clear_System()
     
     def search_inventory(self):
         if __debug__:
             print('search_inventory() called')
         self.home_inventory.search_inventory()
-        input('Press any key to continue...')
+        input('Press Enter to continue...')
         self.clear_System()
         
     def add_items(self):

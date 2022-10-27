@@ -1,7 +1,9 @@
 """Implements Home Inventory data structures and operations."""
 
+
 import json
 from datetime import date
+from operator import index
 
 # Backend
 class HomeInventory():
@@ -27,8 +29,6 @@ class HomeInventory():
     
     def load_inventory(self):
         """User loads inventory from file"""
-        if __debug__:
-            print('load_inventory() called')
         try:
             file_path = self._get_file_path()
             """With is safe (this is for future refrence)"""
@@ -39,8 +39,6 @@ class HomeInventory():
             
     def save_inventory(self):
         """Saves current inventory to file"""
-        if __debug__:
-            print('save_inventory() was called')
         if self.dictionary != None:
             file_path = self._get_file_path()
             """again this is the safe way to open files!!!"""
@@ -49,18 +47,15 @@ class HomeInventory():
     
     def search_inventory(self):
         """Searches current inventory based on user input"""
-        if __debug__:
-            print('search_inventory() called')
+        searched = input('Enter item name: ')
         
-        
+
     def list_inventory(self):
-        if __debug__:
-            print('list_inventory() was called')
         for key, value in self.dictionary.items():
             if key == 'items':
                 print('items:')
                 for item in value:
-                    print(f'\t {item["item"]:15} \t {item["count"]}')
+                    print(f'\t {item["item"]:10} \t {item["count"]}')
             else:
                 print(f'{key}: \t {value}')
     
@@ -74,8 +69,6 @@ class HomeInventory():
         return f_path
     
     def _Initialize_Home_Inventory_Dictionary(self):
-        if __debug__:
-            print("Initializing new Home Inventory...")
         self.dictionary = {}
         self.dictionary['type'] = 'Home Inventory'
         self.dictionary['date'] = date.today().isoformat()

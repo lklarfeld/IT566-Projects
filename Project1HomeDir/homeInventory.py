@@ -52,7 +52,10 @@ class HomeInventory():
         """Searches current inventory based on user input"""
         assert self.dictionary != None
         name = input('Enter item name: ')
-        print("Item: " + self.search_name(name) + "\n" + "Count: " + str(self.search_count(name)))
+        if(self.search_name(name) != None):
+            print("Item: " + self.search_name(name) + "\n" + "Count: " + str(self.search_count(name)))
+        else:
+            print("Item not found")
             
     def search_name (self, name):
         for keyval in self.dictionary['items']:

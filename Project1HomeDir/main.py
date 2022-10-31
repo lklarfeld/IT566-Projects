@@ -1,3 +1,6 @@
+# Louis Klarfeld
+# This code is academic work and not to be used commercially
+# 10/31/22
 """Explicit main execution module."""
 from inventoryApp import InventoryApp
 

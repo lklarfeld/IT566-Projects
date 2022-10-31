@@ -1,3 +1,6 @@
+# Louis Klarfeld
+# This code is academic work and not to be used commercially
+# 10/31/22
 """Implements Home Inventory data structures and operations."""
 
 
@@ -47,7 +50,19 @@ class HomeInventory():
     
     def search_inventory(self):
         """Searches current inventory based on user input"""
-        searched = input('Enter item name: ')
+        assert self.dictionary != None
+        name = input('Enter item name: ')
+        print("Item: " + self.search_name(name) + "\n" + "Count: " + str(self.search_count(name)))
+            
+    def search_name (self, name):
+        for keyval in self.dictionary['items']:
+            if name.lower() == keyval['item'].lower():
+                return keyval['item']
+    
+    def search_count (self, name):
+        for keyval in self.dictionary['items']:
+            if name.lower() == keyval['item'].lower():
+                return keyval['count']
         
 
     def list_inventory(self):

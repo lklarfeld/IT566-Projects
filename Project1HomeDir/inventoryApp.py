@@ -1,3 +1,6 @@
+# Louis Klarfeld
+# This code is academic work and not to be used commercially
+# 10/31/22
 """Implements household inventory control features."""
 
 from homeInventory import HomeInventory

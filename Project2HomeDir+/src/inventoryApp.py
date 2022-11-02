@@ -62,8 +62,7 @@ class InventoryApp():
             case self.SEARCH_INVENTORY:
                 self.search_inventory()
             case self.EXIT:
-                if __debug__:
-                    print('Bye!')
+                self.home_inventory.exit_app()
                 self.keep_going = False
                 self.clear_System
             case _:

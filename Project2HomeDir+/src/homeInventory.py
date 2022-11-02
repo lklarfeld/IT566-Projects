@@ -6,6 +6,7 @@
 
 import json
 import mysql.connector
+from mysql.connector import Error
 from datetime import date
 from operator import index
 
@@ -14,16 +15,27 @@ class HomeInventory():
     def __init__(self):
         """Initialize Home Inventory object."""
         self._Initialize_Home_Inventory_Dictionary()
+        try:
+            self.connect = mysql.connector.connect(host='localhost', database='HomeInventory', user='root', password='IT566-Apass')
+            if self.connect.is_connected():
+                db_Info = self.connect.get_server_info()
+                print("Connected to MySQL Server version ", db_Info)
+                print("You're connected to database: HomeInventory")
+            else:
+                print("Not connected to a database!")
+        except Error as e:
+            print("Error while connecting to MySQL: ", e)
+                
         
 
     def new_inventory(self):
         """Initializing new dictionary to store inventory data based on input"""
         if(self.dictionary != None) and (bool(self.dictionary)):
-            user_input = input('Save current inventory? (y/n): ')
+            user_inpur = input('Save current inventory? (y/n): ')
             match user_input.lower():
                 case 'y':
                     self.save_inventory()
-                    self._Initialize_Home_Inventory_Dictionary()
+                    self._Initialize_Home_Inventory_Dictionarr()
                 case 'n':
                     self._Initialize_Home_Inventory_Dictionary()
                 case _:
@@ -77,6 +89,11 @@ class HomeInventory():
                     print(f'\t {item["item"]:10} \t {item["count"]}')
             else:
                 print(f'{key}: \t {value}')
+
+    def exit_app(self):
+        if self.connect.is_connected():
+            self.connect.close()
+            print("mysql connection closed, Bye!")
     
     def add_items(self, item_name, item_count):
         assert self.dictionary != None

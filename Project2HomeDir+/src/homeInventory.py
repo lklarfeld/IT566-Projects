@@ -31,11 +31,11 @@ class HomeInventory():
     def new_inventory(self):
         """Initializing new dictionary to store inventory data based on input"""
         if(self.dictionary != None) and (bool(self.dictionary)):
-            user_inpur = input('Save current inventory? (y/n): ')
+            user_input = input('Save current inventory? (y/n): ')
             match user_input.lower():
                 case 'y':
                     self.save_inventory()
-                    self._Initialize_Home_Inventory_Dictionarr()
+                    self._Initialize_Home_Inventory_Dictionary()
                 case 'n':
                     self._Initialize_Home_Inventory_Dictionary()
                 case _:

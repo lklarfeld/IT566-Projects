@@ -5,7 +5,7 @@
 
 
 import json
-import mysql.connector
+import mysql,connector
 from mysql.connector import Error
 from datetime import date
 from operator import index
@@ -16,7 +16,7 @@ class HomeInventory():
         """Initialize Home Inventory object."""
         self._Initialize_Home_Inventory_Dictionary()
         try:
-            self.connect = mysql.connector.connect(host='localhost', database='HomeInventory', user='root', password='IT566-Apass')
+            self.connect = mysql.connector.connect(host='localhost', database='homeinventory', user='boss', password='IT566-Apass')
             if self.connect.is_connected():
                 db_Info = self.connect.get_server_info()
                 print("Connected to MySQL Server version ", db_Info)

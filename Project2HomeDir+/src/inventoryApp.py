@@ -14,16 +14,17 @@ class InventoryApp():
         """Initializing objects"""
 		# Constants
         self.NEW_INVENTORY='1'
-        self.LOAD_INVENTORY='2'
-        self.LIST_INVENTORY='3'
+        self.EXPORT_INV='3'
+        self.LIST_INVENTORY='6'
         self.ADD_ITEMS='4'
-        self.SAVE_INVENTORY='5'
+        self.SAVE_INVENTORY='2'
         self.SEARCH_INVENTORY='6'
         self.EXIT='7'
 		# Fields
         self.menu_choice = 1
         self.keep_going = True
         self.home_inventory = HomeInventory()
+        self.password = None 
         pass
         
 
@@ -35,11 +36,11 @@ class InventoryApp():
         print('\t\t\tHousehold Inventory Application')
         print()
         print('\t\t1. New Inventory')
-        print('\t\t2. Load Inventory')
-        print('\t\t3. List Inventory')
+        print('\t\t2. Save Inventory')
+        print('\t\t3. Export Inventory to File')
         print('\t\t4. Add Items')
-        print('\t\t5. Save Inventory')
-        print('\t\t6. Search Inventory')
+        print('\t\t5. Search Inventory')
+        print('\t\t6. Display Inventory')
         print('\t\t7. Exit')
         print()
         
@@ -51,8 +52,8 @@ class InventoryApp():
         match self.menu_choice:
             case self.NEW_INVENTORY:
                 self.new_inventory()
-            case self.LOAD_INVENTORY:
-                self.load_inventory()
+            case self.EXPORT_INV:
+                self.export_inv()
             case self.LIST_INVENTORY:
                 self.list_inventory()
             case self.ADD_ITEMS:
@@ -62,9 +63,9 @@ class InventoryApp():
             case self.SEARCH_INVENTORY:
                 self.search_inventory()
             case self.EXIT:
-                self.home_inventory.exit_app()
-                self.keep_going = False
+                print("Bye!!!")
                 self.clear_System
+                self.keep_going = False
             case _:
                 print('Non-valid choice!')
                 
@@ -72,46 +73,62 @@ class InventoryApp():
         """User creates a new inventory"""
         if __debug__:
             print('new_inventory() called')
-        self.home_inventory.new_inventory()
+        db_test = HomeInventory('localhost', 3306, 'home_inventory', 'home_inventory_user', self.password)
+        self.tablename = input('Input new table name: ')
+        self.table = self.tablename
+        self.more_keys = True
+        while self.more_keys == True:
+            self.column = input('Enter key name type (CHAR or INT) and character limit (example: item CHAR(20))')
+            self.table += ", " + self.column
+            keep_going = input('add another key? y/n')
+            if keep_going == "n":
+                self.more_keys == False
+        db_test.new_inventory(self.table)
         input('Press Enter to continue...')
         self.clear_System()
         
-    def load_inventory(self):
+    def export_inv(self):
         if __debug__:
             print('load_inventory() called')
-        self.home_inventory.load_inventory()
+        db_test = HomeInventory('localhost', 3306, 'home_inventory', 'home_inventory_user', self.password)
+        db_test.export_inv()
         input('Press Enter to continue...')
         self.clear_System()
         
     def list_inventory(self):
         if __debug__:
             print('list_inventory() called')
-        self.home_inventory.list_inventory()
+        db_test = HomeInventory('localhost', 3306, 'home_inventory', 'home_inventory_user', self.password)
+        db_test.list_inventory()
         input('Press Enter to continue...')
         self.clear_System()
         
     def save_inventory(self):
         if __debug__:
             print('save_inventory() called')
-        self.home_inventory.save_inventory()
+        db_test = HomeInventory('localhost', 3306, 'home_inventory', 'home_inventory_user', self.password)
+        db_test.save_inventory()
         input('Press Enter to continue...')
         self.clear_System()
     
     def search_inventory(self):
         if __debug__:
             print('search_inventory() called')
-        self.home_inventory.search_inventory()
+        db_test = HomeInventory('localhost', 3306, 'home_inventory', 'home_inventory_user', self.password)
+        item = input('Enter the name of the desired item: ')
+        db_test.search_inventory(item)
         input('Press Enter to continue...')
         self.clear_System()
         
     def add_items(self):
         if __debug__:
             print('add_items() called')
+            db_test = HomeInventory('localhost', 3306, 'home_inventory', 'home_inventory_user', self.password)
             keep_going = 'y'
         while keep_going[0] == 'y':
             item_name = input('Item name: ')
             item_count = input('Item count: ')
-            self.home_inventory.add_items(item_name, item_count)
+            db_test.add_items(item_name, item_count)
             keep_going = input('Add another (y/n): ')
 
     def start_Application(self):

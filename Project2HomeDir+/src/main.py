@@ -1,18 +1,15 @@
 """Explicit main execution module."""
 
 from getpass import getpass
-from sql_test import SqlTest
+from homeInventory import HomeInventory
+from inventoryApp import InventoryApp
 
 
 def main():
 	"""Execute main program."""
 	#password = getpass('Enter DB Password: ')
-	password = None
-	db_test = SqlTest('localhost', 3306, 'home_inventory', 'home_inventory_user', password)
-	item = input("Item name: ")
-	count = input("Item count: ")
-	db_test.insert_item(item, int(count))
-	print(db_test.query_all())
+	home_inventory_app = InventoryApp()
+	home_inventory_app.start_Application()
 
 
 # Call main() if this is the main execution module

@@ -5,109 +5,132 @@
 
 
 import json
-import mysql,connector
-from mysql.connector import Error
+import mysql.connector
+from mysql.connector import connect, Error
 from datetime import date
 from operator import index
 
 # Backend
 class HomeInventory():
-    def __init__(self):
-        """Initialize Home Inventory object."""
-        self._Initialize_Home_Inventory_Dictionary()
-        try:
-            self.connect = mysql.connector.connect(host='localhost', database='homeinventory', user='boss', password='IT566-Apass')
-            if self.connect.is_connected():
-                db_Info = self.connect.get_server_info()
-                print("Connected to MySQL Server version ", db_Info)
-                print("You're connected to database: HomeInventory")
-            else:
-                print("Not connected to a database!")
-        except Error as e:
-            print("Error while connecting to MySQL: ", e)
+    def __init__(self, db_host, db_port, db_name, db_user_name, db_password):
+        """Initialize object properties."""
+        # Fields
+        self._db_port = db_port
+        self._db_name = db_name
+        self._db_host = db_host
+        self._db_user_name = db_user_name
+        self._db_password = db_password
+        self.db_connection = None
+		# Constants
+        self.SELECT_ALL = 'SELECT id, item, count FROM items'
+        self.SELECT = 'SELECT item FROM items WHERE item="'"%s"'"'
+        self.INSERT = 'INSERT INTO items (item, count) VALUES(%s, %s)'
+        self.CREATE = 'CREATE TABLE %s'
                 
         
 
-    def new_inventory(self):
+    def new_inventory(self, table):
         """Initializing new dictionary to store inventory data based on input"""
-        if(self.dictionary != None) and (bool(self.dictionary)):
-            user_input = input('Save current inventory? (y/n): ')
-            match user_input.lower():
-                case 'y':
-                    self.save_inventory()
-                    self._Initialize_Home_Inventory_Dictionary()
-                case 'n':
-                    self._Initialize_Home_Inventory_Dictionary()
-                case _:
-                    self._Initialize_Home_Inventory_Dictionary()
-        else:
-            self._Initialize_Home_Inventory_Dictionary()
-    
-    def load_inventory(self):
-        """User loads inventory from file"""
         try:
-            file_path = self._get_file_path()
-            """With is safe (this is for future refrence)"""
-            with open(file_path, 'r', encoding='UTF-8') as f:
-                self.dictionary = json.loads(f.read())
-        except OSError:
-            print('Problem loading file. Please try again :)')
+            with connect(
+				host=self._db_host,
+				user=self._db_user_name,
+				password=self._db_password,
+				database=self._db_name,
+				port=self._db_port
+			) as connection:
+                cursor = connection.cursor()
+                cursor.execute(self.CREATE, (table))
+                cursor.close()
+        except Error as e:
+            print(e)
+
+
+    def export_inv(self):
+        """Exports database to file"""
+        try:
+            with connect(
+				host=self._db_host,
+				user=self._db_user_name,
+				password=self._db_password,
+				database=self._db_name,
+				port=self._db_port
+			) as connection:
+                cursor = connection.cursor()
+                cursor.execute(self.SELECT_ALL)
+                results = cursor.fetchall()
+                cursor.close()
+        except Error as e:
+            print(e)
+        f_path = input("Please enter path and filename: ")
+        with open(f_path, 'w', encoding='UTF-8') as f: 
+            f.write(json.dump(results))
             
     def save_inventory(self):
-        """Saves current inventory to file"""
-        if self.dictionary != None:
-            file_path = self._get_file_path()
-            """again this is the safe way to open files!!!"""
-            with open(file_path, 'w', encoding='UTF-8') as f:
-                f.write(json.dumps(self.dictionary))
+        """Saves current inventory"""
+        try:
+            with connect(
+				host=self._db_host,
+				user=self._db_user_name,
+				password=self._db_password,
+				database=self._db_name,
+				port=self._db_port
+			) as connection:
+                cursor = connection.cursor()
+                connection.commit()
+                cursor.close()
+        except Error as e:
+            print(e)
     
-    def search_inventory(self):
+    def search_inventory(self, items):
         """Searches current inventory based on user input"""
-        assert self.dictionary != None
-        name = input('Enter item name: ')
-        if(self.search_name(name) != None):
-            print("Item: " + self.search_name(name) + "\n" + "Count: " + str(self.search_count(name)))
-        else:
-            print("Item not found")
-            
-    def search_name (self, name):
-        for keyval in self.dictionary['items']:
-            if name.lower() == keyval['item'].lower():
-                return keyval['item']
-    
-    def search_count (self, name):
-        for keyval in self.dictionary['items']:
-            if name.lower() == keyval['item'].lower():
-                return keyval['count']
-        
+        try:
+            with connect(
+				host=self._db_host,
+				user=self._db_user_name,
+				password=self._db_password,
+				database=self._db_name,
+				port=self._db_port
+			) as connection:
+                cursor = connection.cursor()
+                cursor.execute(self.SELECT, (items))
+                results = cursor.fetchall()
+                cursor.close()
+        except Error as e:
+            print(e)
+        print(results)
 
     def list_inventory(self):
-        for key, value in self.dictionary.items():
-            if key == 'items':
-                print('items:')
-                for item in value:
-                    print(f'\t {item["item"]:10} \t {item["count"]}')
-            else:
-                print(f'{key}: \t {value}')
+        """Displays Inventory"""
+        try:
+            with connect(
+				host=self._db_host,
+				user=self._db_user_name,
+				password=self._db_password,
+				database=self._db_name,
+				port=self._db_port
+			) as connection:
+                cursor = connection.cursor()
+                cursor.execute(self.SELECT_ALL)
+                results = cursor.fetchall()
+                cursor.close()
+        except Error as e:
+            print(e)
+        print(results)
 
-    def exit_app(self):
-        if self.connect.is_connected():
-            self.connect.close()
-            print("mysql connection closed, Bye!")
     
-    def add_items(self, item_name, item_count):
-        assert self.dictionary != None
-        self.dictionary['items'].append({'item': item_name, 'count': int(item_count)})
-
-    def _get_file_path(self):
-        """Gets file path from user"""
-        f_path = input("Please enter path and filename: ")
-        return f_path
-    
-    def _Initialize_Home_Inventory_Dictionary(self):
-        self.dictionary = {}
-        self.dictionary['type'] = 'Home Inventory'
-        self.dictionary['date'] = date.today().isoformat()
-        self.dictionary['items'] = []
-        if __debug__:
-            print("New Home Inventory Initialized")
+    def add_items(self, item, count):
+        try:
+            with connect(
+				host=self._db_host,
+				user=self._db_user_name,
+				password=self._db_password,
+				database=self._db_name,
+				port=self._db_port
+			) as connection:
+                cursor = connection.cursor()
+                cursor.execute(self.INSERT, (item, count))
+                connection.commit()
+                cursor.close()
+        except Error as e:
+            print(e)

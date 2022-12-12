@@ -23,13 +23,13 @@ class HomeInventory():
         self.db_connection = None
 		# Constants
         self.SELECT_ALL = 'SELECT id, item, count FROM items'
-        self.SELECT = 'SELECT item FROM items WHERE item="'"%s"'"'
+        self.SELECT = 'SELECT * FROM items WHERE item = %s'
         self.INSERT = 'INSERT INTO items (item, count) VALUES(%s, %s)'
-        self.CREATE = 'CREATE TABLE %s'
+        self.CREATE = 'CREATE TABLE `newitems` (`id` int(11) NOT NULL, `item` varchar(11) NOT NULL, `count` int(11) NOT NULL)'
                 
         
 
-    def new_inventory(self, table):
+    def new_inventory(self):##, table, columns):
         """Initializing new dictionary to store inventory data based on input"""
         try:
             with connect(
@@ -40,7 +40,7 @@ class HomeInventory():
 				port=self._db_port
 			) as connection:
                 cursor = connection.cursor()
-                cursor.execute(self.CREATE, (table))
+                cursor.execute(self.CREATE)
                 cursor.close()
         except Error as e:
             print(e)
@@ -62,9 +62,12 @@ class HomeInventory():
                 cursor.close()
         except Error as e:
             print(e)
-        f_path = input("Please enter path and filename: ")
-        with open(f_path, 'w', encoding='UTF-8') as f: 
-            f.write(json.dump(results))
+        try:
+            f_path = input("Please enter path and filename: ")
+            with open(f_path, 'w', encoding='UTF-8') as f: 
+                f.write(json.dumps(results))
+        except Error as e:
+            print(e)
             
     def save_inventory(self):
         """Saves current inventory"""
@@ -93,12 +96,11 @@ class HomeInventory():
 				port=self._db_port
 			) as connection:
                 cursor = connection.cursor()
-                cursor.execute(self.SELECT, (items))
-                results = cursor.fetchall()
+                cursor.execute(self.SELECT, (items,))
+                print(cursor.fetchall())
                 cursor.close()
         except Error as e:
             print(e)
-        print(results)
 
     def list_inventory(self):
         """Displays Inventory"""

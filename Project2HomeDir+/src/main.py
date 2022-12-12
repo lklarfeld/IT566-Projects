@@ -1,7 +1,6 @@
 """Explicit main execution module."""
 
 from getpass import getpass
-from homeInventory import HomeInventory
 from inventoryApp import InventoryApp
 
 

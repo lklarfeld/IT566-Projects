@@ -18,13 +18,13 @@ class InventoryApp():
         self.LIST_INVENTORY='6'
         self.ADD_ITEMS='4'
         self.SAVE_INVENTORY='2'
-        self.SEARCH_INVENTORY='6'
+        self.SEARCH_INVENTORY='5'
         self.EXIT='7'
 		# Fields
         self.menu_choice = 1
         self.keep_going = True
-        self.home_inventory = HomeInventory()
         self.password = None 
+        self.home_inventory = HomeInventory('localhost', 3306, 'home_inventory', 'home_inventory_user', self.password)
         pass
         
 
@@ -74,16 +74,7 @@ class InventoryApp():
         if __debug__:
             print('new_inventory() called')
         db_test = HomeInventory('localhost', 3306, 'home_inventory', 'home_inventory_user', self.password)
-        self.tablename = input('Input new table name: ')
-        self.table = self.tablename
-        self.more_keys = True
-        while self.more_keys == True:
-            self.column = input('Enter key name type (CHAR or INT) and character limit (example: item CHAR(20))')
-            self.table += ", " + self.column
-            keep_going = input('add another key? y/n')
-            if keep_going == "n":
-                self.more_keys == False
-        db_test.new_inventory(self.table)
+        db_test.new_inventory()##self.table, self.column)
         input('Press Enter to continue...')
         self.clear_System()
         
